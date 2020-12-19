@@ -5,62 +5,62 @@ import com.google.gson.annotations.SerializedName
 data class JadwalSholatResponse(
 
     @field:SerializedName("jadwal")
-    val jadwal: Jadwal,
+    val jadwal: Jadwal=Jadwal(),
 
     @field:SerializedName("query")
-    val query: Query,
+    val query: Query= Query(),
 
     @field:SerializedName("status")
-    val status: String
+    val status: String= ""
 )
 
 data class Data(
 
     @field:SerializedName("imsak")
-    val imsak: String,
+    val imsak: String = "",
 
     @field:SerializedName("isya")
-    val isya: String,
+    val isya: String= "",
 
     @field:SerializedName("dzuhur")
-    val dzuhur: String,
+    val dzuhur: String= "",
 
     @field:SerializedName("dhuha")
-    val dhuha: String,
+    val dhuha: String= "",
 
     @field:SerializedName("subuh")
-    val subuh: String,
+    val subuh: String= "",
 
     @field:SerializedName("terbit")
-    val terbit: String,
+    val terbit: String= "",
 
     @field:SerializedName("ashar")
-    val ashar: String,
+    val ashar: String= "",
 
     @field:SerializedName("tanggal")
-    val tanggal: String,
+    val tanggal: String= "",
 
     @field:SerializedName("maghrib")
-    val maghrib: String
+    val maghrib: String= ""
 )
 
 data class Query(
 
     @field:SerializedName("kota")
-    val kota: String,
+    val kota: String= "",
 
     @field:SerializedName("format")
-    val format: String,
+    val format: String= "",
 
     @field:SerializedName("tanggal")
-    val tanggal: String
+    val tanggal: String= ""
 )
 
 data class Jadwal(
 
     @field:SerializedName("data")
-    val data: Data,
+    val data: Data= Data(),
 
     @field:SerializedName("status")
-    val status: String
+    val status: String= ""
 )
