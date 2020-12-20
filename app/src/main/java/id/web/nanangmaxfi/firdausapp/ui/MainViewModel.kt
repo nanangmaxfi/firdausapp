@@ -20,6 +20,6 @@ class MainViewModel(private val prayerScheduleRepository: PrayerScheduleReposito
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getPrayerSchedule(city: String, date: String) : LiveData<Resource<JadwalSholatEntity>> =
-        prayerScheduleRepository.getPrayerSchedule(city, date)
+    fun getPrayerSchedule(city: String, date: String, session: String) : LiveData<Resource<JadwalSholatEntity>> =
+        prayerScheduleRepository.getPrayerSchedule(city, date, session)
 }

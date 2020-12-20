@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         supportActionBar?.hide()
         activityMainBinding.textCity.text = "Bantul, Yogyakarta"
-        viewModel.getPrayerSchedule("779",configUtils.getCurrentDate()).observe(this, {jadwal ->
+        viewModel.getPrayerSchedule("779",configUtils.getCurrentDate(), "today").observe(this, {jadwal ->
             if (jadwal != null){
                 when(jadwal.status){
                     Status.LOADING ->{}
@@ -87,6 +87,27 @@ class MainActivity : AppCompatActivity() {
             showNextSchedule(getString(R.string.isya), data?.isya)
             countdonw(configUtils.diffTimeLong(configUtils.convertTimeToMilis(data?.isya)))
         }
+        else if (currentTime > configUtils.convertTimeToMilis(data?.isya)){
+            forTomorrow()
+        }
+    }
+
+    private fun forTomorrow(){
+        viewModel.getPrayerSchedule("779",configUtils.getTomorrowDate(), "tomorrow").observe(this, {jadwal ->
+            if (jadwal != null){
+                when(jadwal.status){
+                    Status.LOADING ->{}
+                    Status.SUCCESS ->{
+                        showNextSchedule(getString(R.string.subuh), jadwal.data?.subuh)
+                        countdonw(configUtils.diffTimeLong(
+                                configUtils.convertTimeToMilisByDate(configUtils.getTomorrowDate(), jadwal.data?.subuh)))
+                    }
+                    Status.ERROR ->{
+                        Toast.makeText(this, "Terjadi Kesalahan", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        })
     }
 
     private fun showNextSchedule(name: String, time: String?){
@@ -98,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         val countdown = object: CountDownTimer(timeMilis, 1000){
             override fun onTick(millisUntilFinished: Long) {
                 val hour = ((millisUntilFinished / 1000) / 60)/60
-                val minute = (millisUntilFinished / 1000) / 60
+                val minute = ((millisUntilFinished / 1000) / 60) % 60
                 val seconds = (millisUntilFinished / 1000) % 60
 
                 activityMainBinding.textCountdown.text ="$hour jam $minute menit $seconds detik"

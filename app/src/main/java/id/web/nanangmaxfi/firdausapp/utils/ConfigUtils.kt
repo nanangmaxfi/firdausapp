@@ -19,9 +19,23 @@ class ConfigUtils {
         return format.format(Date())
     }
 
+    fun getTomorrowDate(): String{
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.add(Calendar.DATE, 1)
+        return format.format(calendar.time)
+    }
+
     fun convertTimeToMilis(time: String?): Long{
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
         val date = format.parse("${getCurrentDate()} $time")
+        return date?.time?:Date().time
+    }
+
+    fun convertTimeToMilisByDate(date: String, time: String?): Long{
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+        val date = format.parse("$date $time")
         return date?.time?:Date().time
     }
 

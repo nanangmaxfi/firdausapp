@@ -9,8 +9,8 @@ interface PrayerScheduleDao {
     @Query("SELECT * FROM jadwalsholatentities")
     fun getAllSchedules() : LiveData<List<JadwalSholatEntity>>
 
-    @Query("SELECT * FROM jadwalsholatentities WHERE cityCode = :cityCode")
-    fun getCitySchedule(cityCode: String) : LiveData<JadwalSholatEntity>
+    @Query("SELECT * FROM jadwalsholatentities WHERE cityCode = :cityCode AND session = :session")
+    fun getCitySchedule(cityCode: String, session: String) : LiveData<JadwalSholatEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSchedule(prayerSchedule: JadwalSholatEntity)

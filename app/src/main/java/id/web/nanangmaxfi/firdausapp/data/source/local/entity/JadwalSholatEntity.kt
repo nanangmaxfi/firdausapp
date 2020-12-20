@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey
 data class JadwalSholatEntity(
     @PrimaryKey
     @NonNull
+    @ColumnInfo(name = "session")
+    var session: String,
+
     @ColumnInfo(name = "cityCode")
     var cityCode: String,
 

@@ -30,11 +30,12 @@ class PrayerScheduleRepository private constructor(
 
     override fun getPrayerSchedule(
         city: String,
-        date: String
+        date: String,
+        session: String
     ): LiveData<Resource<JadwalSholatEntity>> {
         return object : NetworkBoundResource<JadwalSholatEntity, JadwalSholatResponse>(appExecutors){
             override fun loadFromDB(): LiveData<JadwalSholatEntity> =
-                localDataSource.getCityPrayerSchedule(city)
+                localDataSource.getCityPrayerSchedule(city, session)
 
             override fun shouldFetch(data: JadwalSholatEntity?): Boolean =
                  data == null || data.date != date
@@ -45,7 +46,7 @@ class PrayerScheduleRepository private constructor(
 
             override fun saveCallResult(data: JadwalSholatResponse) {
                 val jadwal = data.jadwal.data
-                val jadwalSholatEntity = JadwalSholatEntity(city, date, jadwal.imsak, jadwal.isya, jadwal.dzuhur,
+                val jadwalSholatEntity = JadwalSholatEntity(session, city, date, jadwal.imsak, jadwal.isya, jadwal.dzuhur,
                                     jadwal.dhuha, jadwal.subuh, jadwal.terbit, jadwal.ashar, jadwal.tanggal, jadwal.maghrib)
                 localDataSource.insertPrayerSchedule(jadwalSholatEntity)
             }

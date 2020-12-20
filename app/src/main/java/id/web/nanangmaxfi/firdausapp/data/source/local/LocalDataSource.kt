@@ -13,7 +13,8 @@ class LocalDataSource private constructor(private val prayerScheduleDao: PrayerS
     }
 
     fun getAllPrayerSchedules() : LiveData<List<JadwalSholatEntity>> = prayerScheduleDao.getAllSchedules()
-    fun getCityPrayerSchedule(cityCode:String) : LiveData<JadwalSholatEntity> = prayerScheduleDao.getCitySchedule(cityCode)
+    fun getCityPrayerSchedule(cityCode:String, session: String) : LiveData<JadwalSholatEntity> =
+            prayerScheduleDao.getCitySchedule(cityCode, session)
     fun insertPrayerSchedule(prayerSchedule: JadwalSholatEntity) = prayerScheduleDao.insertSchedule(prayerSchedule)
     fun updatePrayerSchedule(prayerSchedule: JadwalSholatEntity) = prayerScheduleDao.updateSchedule(prayerSchedule)
 }

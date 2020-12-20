@@ -5,5 +5,5 @@ import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
 import id.web.nanangmaxfi.firdausapp.vo.Resource
 
 interface PrayerScheduleDataSource {
-    fun getPrayerSchedule(city: String, date: String) : LiveData<Resource<JadwalSholatEntity>>
+    fun getPrayerSchedule(city: String, date: String, session: String) : LiveData<Resource<JadwalSholatEntity>>
 }
