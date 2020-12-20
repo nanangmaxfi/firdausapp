@@ -2,4 +2,9 @@
     <string name="app_name">Firdaus</string>
     <string name="subuh">Subuh</string>
     <string name="fajar">Fajar</string>
+    <string name="jadwal_sholat">Jadwal Sholat</string>
+    <string name="dzuhur">Dzuhur</string>
+    <string name="ashar">Ashar</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isya">Isya</string>
 </resources>

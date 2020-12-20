@@ -153,7 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Dzuhur"
+        android:text="@string/dzuhur"
         app:layout_constraintStart_toStartOf="@+id/label_fajar"
         app:layout_constraintTop_toBottomOf="@+id/label_fajar" />
 
@@ -182,7 +182,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Ashar"
+        android:text="@string/ashar"
         app:layout_constraintStart_toStartOf="@+id/label_dzuhur"
         app:layout_constraintTop_toBottomOf="@+id/label_dzuhur" />
 
@@ -211,7 +211,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Maghrib"
+        android:text="@string/maghrib"
         app:layout_constraintStart_toStartOf="@+id/label_ashar"
         app:layout_constraintTop_toBottomOf="@+id/label_ashar" />
 
@@ -240,7 +240,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Isya"
+        android:text="@string/isya"
         app:layout_constraintStart_toStartOf="@+id/label_maghrib"
         app:layout_constraintTop_toBottomOf="@+id/label_maghrib" />
 
