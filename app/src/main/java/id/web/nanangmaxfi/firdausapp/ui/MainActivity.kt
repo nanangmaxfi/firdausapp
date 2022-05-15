@@ -3,9 +3,7 @@ package id.web.nanangmaxfi.firdausapp.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import id.web.nanangmaxfi.firdausapp.R
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
@@ -13,12 +11,10 @@ import id.web.nanangmaxfi.firdausapp.databinding.ActivityMainBinding
 import id.web.nanangmaxfi.firdausapp.utils.ConfigUtils
 import id.web.nanangmaxfi.firdausapp.viewmodel.ViewModelFactory
 import id.web.nanangmaxfi.firdausapp.vo.Status
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
-    private lateinit var activityMainBinding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private val configUtils = ConfigUtils.getInstance()
     companion object {
         private val TAG: String = this::class.java.simpleName
@@ -27,37 +23,43 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         supportActionBar?.hide()
-        activityMainBinding.textCity.text = "Bantul, Yogyakarta"
-        viewModel.getPrayerSchedule("779",configUtils.getCurrentDate(), "today").observe(this, {jadwal ->
-            if (jadwal != null){
-                when(jadwal.status){
-                    Status.LOADING ->{}
-                    Status.SUCCESS ->{
+        binding.textCity.text = "Bantul, Yogyakarta"
+        viewModel.getPrayerSchedule("779",configUtils.getCurrentDate(), "today").observe(this) { jadwal ->
+            if (jadwal != null) {
+                when (jadwal.status) {
+                    Status.LOADING -> {
+                    }
+                    Status.SUCCESS -> {
                         showPrayerSchedule(jadwal.data)
                         checkNextSchedule(jadwal.data)
                     }
-                    Status.ERROR ->{
+                    Status.ERROR -> {
                         Toast.makeText(this, "Terjadi Kesalahan", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-        })
+        }
+
+        binding.toolbarMain.imageMap.setOnClickListener {
+            val bottomSheetLocation = BottomSheetLocation()
+            bottomSheetLocation.show(supportFragmentManager,"BottomSheetLocation")
+        }
     }
 
     private fun showPrayerSchedule(data: JadwalSholatEntity?){
-        activityMainBinding.textDatetime.text = data?.tanggal
-        activityMainBinding.textTimeSubuh.text = data?.subuh
-        activityMainBinding.textTimeFajar.text = data?.terbit
-        activityMainBinding.textTimeDzuhur.text = data?.dzuhur
-        activityMainBinding.textTimeAshar.text = data?.ashar
-        activityMainBinding.textTimeMaghrib.text = data?.maghrib
-        activityMainBinding.textTimeIsya.text = data?.isya
+        binding.textDatetime.text = data?.tanggal
+        binding.textTimeSubuh.text = data?.subuh
+        binding.textTimeFajar.text = data?.terbit
+        binding.textTimeDzuhur.text = data?.dzuhur
+        binding.textTimeAshar.text = data?.ashar
+        binding.textTimeMaghrib.text = data?.maghrib
+        binding.textTimeIsya.text = data?.isya
     }
 
     private fun checkNextSchedule(data: JadwalSholatEntity?){
@@ -93,26 +95,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun forTomorrow(){
-        viewModel.getPrayerSchedule("779",configUtils.getTomorrowDate(), "tomorrow").observe(this, {jadwal ->
-            if (jadwal != null){
-                when(jadwal.status){
-                    Status.LOADING ->{}
-                    Status.SUCCESS ->{
-                        showNextSchedule(getString(R.string.subuh), jadwal.data?.subuh)
-                        countdonw(configUtils.diffTimeLong(
-                                configUtils.convertTimeToMilisByDate(configUtils.getTomorrowDate(), jadwal.data?.subuh)))
+        viewModel.getPrayerSchedule("779",configUtils.getTomorrowDate(), "tomorrow").observe(this) { jadwal ->
+            if (jadwal != null) {
+                when (jadwal.status) {
+                    Status.LOADING -> {
                     }
-                    Status.ERROR ->{
+                    Status.SUCCESS -> {
+                        showNextSchedule(getString(R.string.subuh), jadwal.data?.subuh)
+                        countdonw(
+                            configUtils.diffTimeLong(
+                                configUtils.convertTimeToMilisByDate(
+                                    configUtils.getTomorrowDate(),
+                                    jadwal.data?.subuh
+                                )
+                            )
+                        )
+                    }
+                    Status.ERROR -> {
                         Toast.makeText(this, "Terjadi Kesalahan", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-        })
+        }
     }
 
     private fun showNextSchedule(name: String, time: String?){
-        activityMainBinding.textSholat.text = name
-        activityMainBinding.textTime.text = time
+        binding.textSholat.text = name
+        binding.textTime.text = time
     }
 
     private fun countdonw(timeMilis: Long){
@@ -122,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                 val minute = ((millisUntilFinished / 1000) / 60) % 60
                 val seconds = (millisUntilFinished / 1000) % 60
 
-                activityMainBinding.textCountdown.text ="$hour jam $minute menit $seconds detik"
+                binding.textCountdown.text ="$hour jam $minute menit $seconds detik"
             }
 
             override fun onFinish() {

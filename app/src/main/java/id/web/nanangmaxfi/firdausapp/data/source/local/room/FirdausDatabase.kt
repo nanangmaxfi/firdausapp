@@ -5,8 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
+import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
 
-@Database(entities = [JadwalSholatEntity::class], version = 1, exportSchema = false)
+@Database(entities = [JadwalSholatEntity::class, LocationEntity::class], version = 1, exportSchema = false)
 abstract class FirdausDatabase : RoomDatabase() {
     abstract fun prayerScheduleDao() : PrayerScheduleDao
 

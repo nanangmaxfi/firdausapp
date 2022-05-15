@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/atur_lokasi"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_automatic_location"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/lokasi_saat_ini"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic_location_on"
+        app:iconTint="@color/primary_text"
+        app:iconPadding="8dp"
+        app:backgroundTint="@android:color/transparent"
+        app:strokeColor="@android:color/transparent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_manual_location"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/cari_lokasi_manual"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic_map"
+        app:iconTint="@color/primary_text"
+        app:iconPadding="8dp"
+        app:backgroundTint="@android:color/transparent"
+        app:strokeColor="@android:color/transparent"/>
+</LinearLayout>

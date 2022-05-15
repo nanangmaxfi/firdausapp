@@ -3,6 +3,7 @@ package id.web.nanangmaxfi.firdausapp.data.source.local.room
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
+import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
 
 @Dao
 interface PrayerScheduleDao {
@@ -18,4 +19,9 @@ interface PrayerScheduleDao {
     @Update
     fun updateSchedule(prayerSchedule: JadwalSholatEntity)
 
+    @Query("SELECT * FROM locationentities WHERE name LIKE '%' || :name || '%'")
+    fun getListLocation(name: String) : LiveData<List<LocationEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertLocation(location: LocationEntity)
 }

@@ -1,12 +1,14 @@
 package id.web.nanangmaxfi.firdausapp.data.source
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import id.web.nanangmaxfi.firdausapp.data.source.local.LocalDataSource
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
+import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
 import id.web.nanangmaxfi.firdausapp.data.source.remote.ApiResponse
 import id.web.nanangmaxfi.firdausapp.data.source.remote.RemoteDataSource
 import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatResponse
+import id.web.nanangmaxfi.firdausapp.data.source.remote.response.LocationResponse
 import id.web.nanangmaxfi.firdausapp.utils.AppExecutors
 import id.web.nanangmaxfi.firdausapp.vo.Resource
 
@@ -52,6 +54,32 @@ class PrayerScheduleRepository private constructor(
             }
 
         }.asLiveData()
+    }
+
+    override fun getLocation(city: String): LiveData<Resource<List<LocationEntity>>> {
+       return object : NetworkBoundResource<List<LocationEntity>, LocationResponse>(appExecutors){
+           override fun loadFromDB(): LiveData<List<LocationEntity>> {
+               return localDataSource.getLocation(city)
+           }
+
+           override fun shouldFetch(data: List<LocationEntity>?): Boolean {
+               return data == null || data.isEmpty()
+           }
+
+           override fun createCall(): LiveData<ApiResponse<LocationResponse>> =
+               remoteDataSource.getSearchLocation(city)
+
+           override fun saveCallResult(data: LocationResponse) {
+               val locationList = data.data
+               if (locationList != null) {
+                   for(location in locationList){
+                        val locationEnity = LocationEntity(location.id, location.lokasi)
+                       localDataSource.insertLocation(locationEnity)
+                   }
+               }
+           }
+
+       }.asLiveData()
     }
 //    override fun getPrayerSchedule(city: String, date: String): LiveData<JadwalSholatEntity> {
 //        val result = MutableLiveData<JadwalSholatEntity>()

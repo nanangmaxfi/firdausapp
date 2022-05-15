@@ -30,5 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginEnd="16dp"
+        android:tint="@color/primary"
         app:srcCompat="@drawable/ic_map"/>
 </androidx.appcompat.widget.Toolbar>

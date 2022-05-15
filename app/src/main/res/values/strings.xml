@@ -7,4 +7,8 @@
     <string name="ashar">Ashar</string>
     <string name="maghrib">Maghrib</string>
     <string name="isya">Isya</string>
+    <string name="atur_lokasi">Atur Lokasi</string>
+    <string name="lokasi_saat_ini">Lokasi saat ini</string>
+    <string name="cari_lokasi_manual">Cari lokasi manual</string>
+    <string name="cari_lokasi">Cari lokasi</string>
 </resources>

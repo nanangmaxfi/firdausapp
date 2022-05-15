@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatResponse
+import id.web.nanangmaxfi.firdausapp.data.source.remote.response.LocationResponse
 import id.web.nanangmaxfi.firdausapp.network_utils.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,6 +48,37 @@ class RemoteDataSource {
             }
         })
         return resultSchedule
+    }
+
+    fun getSearchLocation(city: String) : LiveData<ApiResponse<LocationResponse>>{
+        Log.i(TAG, "Search Location ")
+        val resultLocation = MutableLiveData<ApiResponse<LocationResponse>>()
+        val client = ApiConfig.getApiService().getSearchLocation(city)
+        client.enqueue(object : Callback<LocationResponse>{
+            override fun onResponse(
+                call: Call<LocationResponse>,
+                response: Response<LocationResponse>
+            ) {
+                if (response.isSuccessful){
+                    val locationResponse = response.body()
+                    if (locationResponse != null){
+                        resultLocation.value = ApiResponse.success(locationResponse)
+                    }
+                    else{
+                        resultLocation.value = ApiResponse.error("Data Kosong", LocationResponse())
+                    }
+                }
+                else{
+                    Log.e(TAG, "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<LocationResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+
+        })
+        return resultLocation
     }
 
 //    fun getPrayerSchedule(city: String, date: String, callback: LoadScheduleCallback){
