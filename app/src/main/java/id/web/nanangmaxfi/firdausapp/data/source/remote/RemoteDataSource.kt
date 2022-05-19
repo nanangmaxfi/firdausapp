@@ -23,9 +23,9 @@ class RemoteDataSource {
             }
     }
 
-    fun getPrayerSchedule(city: String, date: String) : LiveData<ApiResponse<JadwalSholatResponse>>{
+    fun getPrayerSchedule(city: String, year: String, month: String, date: String) : LiveData<ApiResponse<JadwalSholatResponse>>{
         val resultSchedule = MutableLiveData<ApiResponse<JadwalSholatResponse>>()
-        val client = ApiConfig.getApiService().getPrayerSchedule(city, date)
+        val client = ApiConfig.getApiService().getPrayerSchedule(city, year, month, date)
         client.enqueue(object : Callback<JadwalSholatResponse> {
             override fun onResponse(
                 call: Call<JadwalSholatResponse>,

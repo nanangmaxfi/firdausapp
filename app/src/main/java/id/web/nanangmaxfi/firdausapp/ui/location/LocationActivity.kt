@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupieAdapter
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
+import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationModel
+import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationPreference
 import id.web.nanangmaxfi.firdausapp.databinding.ActivityLocationBinding
 import id.web.nanangmaxfi.firdausapp.viewmodel.ViewModelFactory
 import id.web.nanangmaxfi.firdausapp.vo.Status
@@ -21,6 +24,7 @@ class LocationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationBinding
     private lateinit var viewModel: LocationViewModel
+    private lateinit var locationPreference: LocationPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +34,11 @@ class LocationActivity : AppCompatActivity() {
 
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[LocationViewModel::class.java]
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        locationPreference = LocationPreference(this)
 
-        //binding.inputLocation.addTextChangedListener(textWatcher)
-        binding.btnSearch.setOnClickListener {
-            val inputName = binding.inputLocation.text.toString()
-            searchLocation(inputName)
-        }
+        binding.inputLocation.addTextChangedListener(textWatcher)
+
     }
 
     private val textWatcher = object : TextWatcher{
@@ -48,10 +51,8 @@ class LocationActivity : AppCompatActivity() {
         }
 
         override fun afterTextChanged(p0: Editable?) {
-            Log.i(TAG,"TEXT: "+p0.toString())
             if (p0 != null) {
                 if (p0.isNotEmpty()){
-                    Log.i(TAG,"TEXT NOT EMPTY: "+p0.toString())
                     searchLocation(p0.toString())
                 }
             }
@@ -83,10 +84,31 @@ class LocationActivity : AppCompatActivity() {
         if (listLocation != null) {
             for(location in listLocation){
                 Log.i(TAG, "Location: "+location.name)
-                adapter.add(LocationItem(location))
+                adapter.add(LocationItem(location, object : LocationItem.OnItemClickListerner{
+                    override fun onItemClickListener(location: LocationEntity) {
+                        val locationModel = LocationModel()
+                        locationModel.cityCode = location.cityCode
+                        locationModel.name = location.name
+                        locationPreference.setLocation(locationModel)
+
+                        Toast.makeText(applicationContext, "Lokasi berhasil diubah", Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+
+                }))
             }
         }
         binding.rvLocation.layoutManager = LinearLayoutManager(this)
         binding.rvLocation.adapter = adapter
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home ->{
+                this.finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

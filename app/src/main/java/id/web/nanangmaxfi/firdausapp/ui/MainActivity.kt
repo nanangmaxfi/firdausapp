@@ -3,10 +3,13 @@ package id.web.nanangmaxfi.firdausapp.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import id.web.nanangmaxfi.firdausapp.R
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
+import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationModel
+import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationPreference
 import id.web.nanangmaxfi.firdausapp.databinding.ActivityMainBinding
 import id.web.nanangmaxfi.firdausapp.utils.ConfigUtils
 import id.web.nanangmaxfi.firdausapp.viewmodel.ViewModelFactory
@@ -16,6 +19,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private val configUtils = ConfigUtils.getInstance()
+    private lateinit var locationPreference: LocationPreference
+    private lateinit var locationModel: LocationModel
+
     companion object {
         private val TAG: String = this::class.java.simpleName
     }
@@ -29,8 +35,20 @@ class MainActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         supportActionBar?.hide()
-        binding.textCity.text = "Bantul, Yogyakarta"
-        viewModel.getPrayerSchedule("779",configUtils.getCurrentDate(), "today").observe(this) { jadwal ->
+
+        locationPreference = LocationPreference(this)
+        locationModel = locationPreference.getLocation()
+        if (locationModel.cityCode.isNullOrBlank()){
+            locationModel.cityCode = "1501"
+            locationModel.name = "KAB. BANTUL"
+
+            locationPreference.setLocation(locationModel)
+        }
+
+        binding.textCity.text = locationModel.name
+        Log.i(TAG,"INFO DATE: "+configUtils.getCurrentDate())
+        viewModel.getPrayerSchedule(locationModel.cityCode!!,configUtils.getCurrentYear(),
+            configUtils.getCurrentMonth(), configUtils.getCurrentDateNumb(),"today").observe(this) { jadwal ->
             if (jadwal != null) {
                 when (jadwal.status) {
                     Status.LOADING -> {
@@ -95,7 +113,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun forTomorrow(){
-        viewModel.getPrayerSchedule("779",configUtils.getTomorrowDate(), "tomorrow").observe(this) { jadwal ->
+        viewModel.getPrayerSchedule(locationModel.cityCode!!,configUtils.getTomorrowDate("yyyy"),
+            configUtils.getTomorrowDate("MM"), configUtils.getTomorrowDate("dd"), "tomorrow").observe(this) { jadwal ->
             if (jadwal != null) {
                 when (jadwal.status) {
                     Status.LOADING -> {

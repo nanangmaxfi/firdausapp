@@ -32,6 +32,8 @@ class PrayerScheduleRepository private constructor(
 
     override fun getPrayerSchedule(
         city: String,
+        year: String,
+        month: String,
         date: String,
         session: String
     ): LiveData<Resource<JadwalSholatEntity>> {
@@ -40,10 +42,10 @@ class PrayerScheduleRepository private constructor(
                 localDataSource.getCityPrayerSchedule(city, session)
 
             override fun shouldFetch(data: JadwalSholatEntity?): Boolean =
-                 data == null || data.date != date
+                 data == null || data.date != date || data.cityCode != city
 
             override fun createCall(): LiveData<ApiResponse<JadwalSholatResponse>> =
-                remoteDataSource.getPrayerSchedule(city, date)
+                remoteDataSource.getPrayerSchedule(city, year, month, date)
 
 
             override fun saveCallResult(data: JadwalSholatResponse) {

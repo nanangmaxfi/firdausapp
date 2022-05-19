@@ -7,9 +7,11 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ApiService {
-    @GET("sholat/format/json/jadwal/kota/{city}/tanggal/{date}")
+    @GET("sholat/jadwal/{city}/{year}/{month}/{date}")
     fun getPrayerSchedule(
         @Path("city") city: String,
+        @Path("year") year: String,
+        @Path("month") month: String,
         @Path("date") date: String
     ): Call<JadwalSholatResponse>
 
