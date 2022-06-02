@@ -1,5 +1,7 @@
 package id.web.nanangmaxfi.firdausapp.ui.location
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +16,7 @@ import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
 import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationModel
 import id.web.nanangmaxfi.firdausapp.data.source.preference.LocationPreference
 import id.web.nanangmaxfi.firdausapp.databinding.ActivityLocationBinding
+import id.web.nanangmaxfi.firdausapp.ui.MainActivity
 import id.web.nanangmaxfi.firdausapp.viewmodel.ViewModelFactory
 import id.web.nanangmaxfi.firdausapp.vo.Status
 
@@ -92,6 +95,8 @@ class LocationActivity : AppCompatActivity() {
                         locationPreference.setLocation(locationModel)
 
                         Toast.makeText(applicationContext, "Lokasi berhasil diubah", Toast.LENGTH_LONG).show()
+                        //val intent = Intent()
+                        setResult(Activity.RESULT_OK)
                         finish()
                     }
 

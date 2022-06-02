@@ -3,7 +3,7 @@ package id.web.nanangmaxfi.firdausapp.data.source.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatResponse
+import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatDailyResponse
 import id.web.nanangmaxfi.firdausapp.data.source.remote.response.LocationResponse
 import id.web.nanangmaxfi.firdausapp.network_utils.ApiConfig
 import retrofit2.Call
@@ -23,27 +23,27 @@ class RemoteDataSource {
             }
     }
 
-    fun getPrayerSchedule(city: String, year: String, month: String, date: String) : LiveData<ApiResponse<JadwalSholatResponse>>{
-        val resultSchedule = MutableLiveData<ApiResponse<JadwalSholatResponse>>()
+    fun getPrayerSchedule(city: String, year: String, month: String, date: String) : LiveData<ApiResponse<JadwalSholatDailyResponse>>{
+        val resultSchedule = MutableLiveData<ApiResponse<JadwalSholatDailyResponse>>()
         val client = ApiConfig.getApiService().getPrayerSchedule(city, year, month, date)
-        client.enqueue(object : Callback<JadwalSholatResponse> {
+        client.enqueue(object : Callback<JadwalSholatDailyResponse> {
             override fun onResponse(
-                call: Call<JadwalSholatResponse>,
-                response: Response<JadwalSholatResponse>
+                call: Call<JadwalSholatDailyResponse>,
+                response: Response<JadwalSholatDailyResponse>
             ) {
                 if (response.isSuccessful){
                     val jadwalSholatResponse = response.body()
                     if (jadwalSholatResponse != null)
                         resultSchedule.value = ApiResponse.success(jadwalSholatResponse)
                     else
-                        resultSchedule.value = ApiResponse.error("Data kosong", JadwalSholatResponse())
+                        resultSchedule.value = ApiResponse.error("Data kosong", JadwalSholatDailyResponse())
 
                 }
                 else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
-            override fun onFailure(call: Call<JadwalSholatResponse>, t: Throwable) {
+            override fun onFailure(call: Call<JadwalSholatDailyResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
@@ -104,7 +104,7 @@ class RemoteDataSource {
 //    }
 
     interface LoadScheduleCallback{
-        fun onDataReceived(jadwalSholatResponse: JadwalSholatResponse?)
+        fun onDataReceived(jadwalSholatResponse: JadwalSholatDailyResponse?)
     }
 
 }

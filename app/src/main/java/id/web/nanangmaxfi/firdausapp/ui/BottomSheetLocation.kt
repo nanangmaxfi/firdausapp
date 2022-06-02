@@ -32,7 +32,8 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
 
         binding.btnManualLocation.setOnClickListener {
             val intent = Intent(view.context, LocationActivity::class.java)
-            startActivity(intent)
+            //startActivity(intent)
+            startActivityForResult(intent, MainActivity.LAUNCH_LOCATION_ACTIVITY)
         }
     }
 }

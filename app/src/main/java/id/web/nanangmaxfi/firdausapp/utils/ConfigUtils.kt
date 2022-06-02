@@ -57,7 +57,7 @@ class ConfigUtils {
     }
 
     fun convertTimeToMilisByDate(date: String, time: String?): Long{
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+        val format = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.ENGLISH)
         val date = format.parse("$date $time")
         return date?.time?:Date().time
     }

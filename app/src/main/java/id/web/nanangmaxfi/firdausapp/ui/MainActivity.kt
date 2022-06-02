@@ -1,5 +1,7 @@
 package id.web.nanangmaxfi.firdausapp.ui
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private val TAG: String = this::class.java.simpleName
+        const val LAUNCH_LOCATION_ACTIVITY = 123
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,15 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         locationPreference = LocationPreference(this)
+        loadSchedule()
+
+        binding.toolbarMain.imageMap.setOnClickListener {
+            val bottomSheetLocation = BottomSheetLocation()
+            bottomSheetLocation.show(supportFragmentManager,"BottomSheetLocation")
+        }
+    }
+
+    private fun loadSchedule(){
         locationModel = locationPreference.getLocation()
         if (locationModel.cityCode.isNullOrBlank()){
             locationModel.cityCode = "1501"
@@ -62,11 +74,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-
-        binding.toolbarMain.imageMap.setOnClickListener {
-            val bottomSheetLocation = BottomSheetLocation()
-            bottomSheetLocation.show(supportFragmentManager,"BottomSheetLocation")
         }
     }
 
@@ -159,5 +166,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         countdown.start()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+           val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            this.finish()
+        }
     }
 }

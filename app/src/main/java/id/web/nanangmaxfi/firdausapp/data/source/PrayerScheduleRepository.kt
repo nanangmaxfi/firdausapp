@@ -7,7 +7,7 @@ import id.web.nanangmaxfi.firdausapp.data.source.local.entity.JadwalSholatEntity
 import id.web.nanangmaxfi.firdausapp.data.source.local.entity.LocationEntity
 import id.web.nanangmaxfi.firdausapp.data.source.remote.ApiResponse
 import id.web.nanangmaxfi.firdausapp.data.source.remote.RemoteDataSource
-import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatResponse
+import id.web.nanangmaxfi.firdausapp.data.source.remote.response.JadwalSholatDailyResponse
 import id.web.nanangmaxfi.firdausapp.data.source.remote.response.LocationResponse
 import id.web.nanangmaxfi.firdausapp.utils.AppExecutors
 import id.web.nanangmaxfi.firdausapp.vo.Resource
@@ -37,19 +37,19 @@ class PrayerScheduleRepository private constructor(
         date: String,
         session: String
     ): LiveData<Resource<JadwalSholatEntity>> {
-        return object : NetworkBoundResource<JadwalSholatEntity, JadwalSholatResponse>(appExecutors){
+        return object : NetworkBoundResource<JadwalSholatEntity, JadwalSholatDailyResponse>(appExecutors){
             override fun loadFromDB(): LiveData<JadwalSholatEntity> =
                 localDataSource.getCityPrayerSchedule(city, session)
 
             override fun shouldFetch(data: JadwalSholatEntity?): Boolean =
                  data == null || data.date != date || data.cityCode != city
 
-            override fun createCall(): LiveData<ApiResponse<JadwalSholatResponse>> =
+            override fun createCall(): LiveData<ApiResponse<JadwalSholatDailyResponse>> =
                 remoteDataSource.getPrayerSchedule(city, year, month, date)
 
 
-            override fun saveCallResult(data: JadwalSholatResponse) {
-                val jadwal = data.jadwal.data
+            override fun saveCallResult(data: JadwalSholatDailyResponse) {
+                val jadwal = data.data.jadwal
                 val jadwalSholatEntity = JadwalSholatEntity(session, city, date, jadwal.imsak, jadwal.isya, jadwal.dzuhur,
                                     jadwal.dhuha, jadwal.subuh, jadwal.terbit, jadwal.ashar, jadwal.tanggal, jadwal.maghrib)
                 localDataSource.insertPrayerSchedule(jadwalSholatEntity)
